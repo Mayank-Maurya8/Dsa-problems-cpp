@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        // this is taken in order to store the vector of vector or we can say the list of list which we used to take in python
+        vector<vector<int>>ans;
+        queue<TreeNode*>q;
+        // in order to avoid a critical case where the input was [] we have to first check
+        if (!root){
+            return ans;
+        }
+        q.push(root);
+        // we push the root element into the queue first
+        while(!q.empty()){
+            // we run this while loop till we are not able to obtain an empty queue
+            int size = q.size();
+            vector <int>level;
+            // we store the nodes which are present that very same level 
+            for (int i =0;i<size;i++){
+                // we check for all the nodes present in a certain level for their left and right if they are present they get pushed into the queue and then the whole procedure is followed again
+                TreeNode *node = q.front();
+                q.pop();
+                if(node->left!=NULL)q.push(node->left);
+                if(node->right!=NULL)q.push(node->right);
+                level.push_back(node->val);
+            }
+            // push the value of a certain vector containing elements of that level at a time
+            ans.push_back(level);
+        }
+        return ans;
+        
+    }
+};
