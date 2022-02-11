@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        // 1 stack so tc is o(2n) as it took n time to insert the element and then jump to while statement and sc(n)
+        vector<int>postorder;
+        stack<TreeNode*>s1;
+        TreeNode* cur = root;
+        while(cur!=NULL || !s1.empty()){
+            if(cur!=NULL){
+                s1.push(cur);
+                cur = cur->left;
+            }
+            else{
+                TreeNode *temp=s1.top()->right;
+                if(temp==NULL){
+                    temp=s1.top();
+                    s1.pop();
+                    postorder.push_back(temp->val);
+                    //we will have to run this n times in worst case when the tree only has right nodes and no left 
+                    while(!s1.empty() && temp==s1.top()->right){
+                        temp=s1.top();
+                        s1.pop();
+                        postorder.push_back(temp->val);
+                    }
+                }
+                else{
+                    cur = temp;
+                }
+            }
+        }
+        return postorder;
+  }      
+ };
