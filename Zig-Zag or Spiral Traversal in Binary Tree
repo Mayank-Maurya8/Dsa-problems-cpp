@@ -1,0 +1,48 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> ans;
+        if(root==NULL)
+            return ans;
+        queue<TreeNode*>q;
+        q.push(root);
+        // we have set the flag as true initially which means that we are going from l->r
+        bool flag = true;
+        while(!q.empty()){
+            // we run the for loop for all the elements at that level in the tree
+            int size = q.size();
+            vector<int>row(size);
+            for (int i=0;i<size;i++){
+                // we insert the value of the front into the node and then pop it from the queue respectively
+                TreeNode* node = q.front();
+                q.pop();
+                // we set the value of the index as i when the flag is true meaning that we are doing l->r traversal on the nodes present in the row and for flag when its flase we will do r->l traversal on the nodes that why we have taken the size-i-1
+                int index=flag?i:(size-i-1);
+                
+                // after inserting the node value into the row we will then insert the left and right elements for that particular node into the queue and then we will simply continue again doin the very same thing
+                row[index]=node->val;
+                if(node->left)
+                    q.push(node->left);
+                if(node->right)
+                    q.push(node->right);
+            }
+            // after we are finish will all the elements at that level we will change the flag value
+            flag = !flag;
+            // then we simply insert the row vector into the main ans vec
+            ans.push_back(row);
+        }
+        return ans;
+        
+    }
+};
