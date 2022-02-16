@@ -1,0 +1,33 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int maxPathSum(TreeNode* root) {
+        // took the minimum value for the maxi
+        int maxi = INT_MIN;
+        maxPathDown(root,maxi);
+        // we return the maxi which is infact the max path sum by considering all the possible paths
+        return maxi;
+    }
+    int maxPathDown(TreeNode* node,int &maxi){
+        if (node==NULL)
+            return 0;
+        // we will check the left as well as the right subtree and then we will find the max sum 
+        // we have taken here max(0,) as we have to ignore the negative valued nodes as that wont help in producing the max path sum 
+        int left = max(0,maxPathDown(node->left,maxi));
+        int right = max(0,maxPathDown(node->right,maxi));
+        // we then update the value of the maxi and then we simply return the max of either subtree added by the value of their respective root node
+        maxi = max(maxi,left+right+node->val);
+        return max(left,right)+node->val;
+            
+    }
+};
