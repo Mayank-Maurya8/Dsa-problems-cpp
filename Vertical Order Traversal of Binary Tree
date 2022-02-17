@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        // map<vertical,for every level we can have multiple nodes so map<level, multiset<int>  
+        
+        // we used multiset inorder to store same values which might appear at the same level and also at the same location
+        // basically we are storing the map of node,vertical,level
+        map<int,map<int,multiset<int>>> nodes;
+        
+        // we will use queue ds inorder to push the element we have to insert into the main result vector based on their respective vertical order
+        queue<pair<TreeNode*,pair<int,int>>> todo;
+        // we will first push the root along with its vertical and level as 0 and 0
+        todo.push({root,{0,0}});
+        while(!todo.empty()){
+            auto p = todo.front();
+            todo.pop();
+            // we will pop the front of the queue and then we will check the node and also the vertical and level value for the same 
+            TreeNode* node=p.first;
+            int x=p.second.first,y=p.second.second;
+            // we will then insert the the node into the map nodes according to its x and y coordinates
+            nodes[x][y].insert(node->val);
+            // we will push the left and the right nodes of the root into the queue 
+            if(node->left){
+                todo.push({node->left,{x-1,y+1}});
+            }
+            if(node->right){
+                todo.push({node->right,{x+1,y+1}});
+            }
+            // here we are adding -1 and +1 as we will have to move according to that if we want to move in certain subtree
+        }
+        vector<vector<int> > ans;
+        for(auto p:nodes){
+            vector<int>col;
+            for(auto q:p.second){
+                // here we will insert all the multiset i.e nodes for different levels inorder to get the values for one vertical
+                col.insert(col.end(),q.second.begin(),q.second.end());
+            }
+            // after we have completed one vertical we will simply push it into the ans 
+            ans.push_back(col);
+        }
+        return ans;
+    }
+};
