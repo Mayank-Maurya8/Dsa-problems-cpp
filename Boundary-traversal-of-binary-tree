@@ -1,0 +1,95 @@
+ // } Driver Code Ends
+/* A binary tree Node
+struct Node
+{
+    int data;
+    Node* left, * right;
+}; */
+
+class Solution {
+public:
+    bool isleaf(Node* root){
+        // this function is to check if the node is a leaf node or not 
+        if(!root->left && !root->right){
+            return true;
+        }
+         return false;
+    }
+    void leftb(Node* node,vector<int> &res){
+        // we will take a cur and we will try to always move in the left subtree
+        Node* cur = node->left;
+        while(cur){
+            if(!isleaf(cur)){
+                res.push_back(cur->data);
+            }
+            first we check for its left subtree , we take the right only when left is not present
+            if(cur->left){
+                cur = cur->left;
+            }
+            else{
+                cur = cur->right;
+            }
+        }
+    }
+    
+    void rightb(Node* node,vector<int> &res){
+        Node* cur = node->right;
+        vector<int>tmp;
+        while(cur){
+            if(!isleaf(cur)){
+                tmp.push_back(cur->data);
+            }
+            if(cur->right) {
+                cur = cur->right;
+            }
+            else{
+                cur = cur->left;
+            }
+        }
+        // we will reverse the tmp vector and we need to store the nodes in the right subtree of the root node into the main res 
+        for(int i = tmp.size()-1;i>=0;--i){
+            res.push_back(tmp[i]);
+        }
+    }
+    
+    void leaves(Node* node,vector<int> &res){
+        // preorder
+        // we will push the node when it is leaf node
+        if(isleaf(node)){
+            res.push_back(node->data);
+        }
+        
+        if(node->left){
+            leaves(node->left,res);
+        }
+        if(node->right){
+            leaves(node->right,res);
+        }
+    }
+
+    // anticlockwise direction 
+    vector <int> boundary(Node *root)
+    {
+        vector<int>res;
+        if(!root) return res;
+        // when the root node is not the leaf node
+        if(!isleaf(root)){
+            res.push_back(root->data);
+        }
+        // we will check the left nodes of the left subtree first
+        leftb(root,res);
+        // preorder traversal in order to get the leaf nodes  
+        leaves(root,res);
+        // then for the right subtree we will accordingly check the right tree first , if it is not present then we will check the left node
+        rightb(root,res);
+        return res;
+    }
+};
+
+
+        vector <int> res = ob.boundary(root);
+        for (int i : res) cout << i << " ";
+        cout << endl;
+    }
+    return 0;
+}  // } Driver Code Ends
