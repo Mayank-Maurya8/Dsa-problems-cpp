@@ -26,6 +26,7 @@ class Solution
             Node* node=it.first;
             int x = it.second;
             // we will search throught the map and if any other node is present for that same value of the vertical then we wont insert else we will 
+            // If it finds the element then it returns an iterator pointing to the element. Otherwise, it returns an iterator pointing to the end of the map, i.e., map::end().
             if(mpp.find(x)==mpp.end()){
                 mpp[x]=node->data;
             }
