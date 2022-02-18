@@ -1,0 +1,48 @@
+/*
+struct Node
+{
+    int data;
+    Node* left;
+    Node* right;
+};
+*/
+class Solution
+{
+    public:
+    //Function to return a list of nodes visible from the top view 
+    //from left to right in Binary Tree.
+    vector<int> topView(Node *root)
+    {
+        vector<int> ans;
+        if(root==NULL) return ans;
+        // we will use this map in order to store the vertical and also the value of that node 
+        map<int,int>mpp;
+        // same as in the vertical traversal we will taket he queue in which we will store the node along with the vertical
+        queue<pair<Node*,int>> q;
+        q.push({root,0});
+        while(!q.empty()){
+            auto it= q.front();
+            q.pop();
+            Node* node=it.first;
+            int x = it.second;
+            // we will search throught the map and if any other node is present for that same value of the vertical then we wont insert else we will 
+            if(mpp.find(x)==mpp.end()){
+                mpp[x]=node->data;
+            }
+            // then we will simply insert the left as well as the right subtree of that node if present into the queue
+            if(node->left){
+                q.push({node->left,x-1});
+            }
+            if(node->right){
+                q.push({node->right,x+1});
+            }
+            
+        }
+        for(auto i:mpp){
+            // we will then insert the the node data based on the verticalvalue based on which we are inserting 
+            ans.push_back(i.second);
+        }
+        return ans;
+    }
+
+};
