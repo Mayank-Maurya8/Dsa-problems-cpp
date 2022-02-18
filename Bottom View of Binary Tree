@@ -1,0 +1,30 @@
+
+
+class Solution {
+  public:
+    vector <int> bottomView(Node *root) {
+        vector<int>ans;
+        if(root==NULL) return ans;
+        map<int,int>mpp;
+        queue<pair<Node*,int>>q;
+        q.push({root,0});
+        while(!q.empty()){
+            auto it=q.front();
+            q.pop();
+            Node* node=it.first;
+            int x=it.second;
+            // same as the top view but in this we will let the later coming nodes replace the nodes for that vertical 
+            // in this way we will be able to get the bottom view 
+            mpp[x]=node->data;
+            if(node->left){
+                q.push({node->left,x-1});
+            }
+            if(node->right){
+                q.push({node->right,x+1});
+            }
+        }
+        for(auto i:mpp){
+            ans.push_back(i.second);
+        }
+    }
+};
