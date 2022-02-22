@@ -1,0 +1,30 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        return root==NULL || isSymmetriccheck(root->left,root->right);
+          
+    }
+    bool isSymmetriccheck(TreeNode* l,TreeNode* r){
+        if(l==NULL || r==NULL){
+            // here we check those nodes whose subtree may or may not be in null
+            // so here we check that if one guy is null the other guy has to also be null
+            return l==r;
+        }
+        if(l->val!=r->val){
+            return false;
+        }
+        // we check both the subtree of a node with the inverted subtree of the mirror tree
+        return isSymmetriccheck(l->left,r->right) && isSymmetriccheck(l->right,r->left);
+    }
+};
