@@ -1,0 +1,33 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        vector <int> res;
+        // we wont take the iterative solution because of the problem of the extra space thats why we are using the recursive solution which requires us to use the reverse preorder traversal 
+        recursion(root,0,res);
+        return res;
+    }
+    void recursion(TreeNode* node,int level , vector<int> &temp){
+        // we are taking the level so that we can compare the level with the number of element present in the res
+        if(node==NULL){
+            return ;
+        }
+        // here we compare the two because we want the rightmost element of each level 
+        if(level==temp.size()){
+            temp.push_back(node->val);
+        }
+        // as it is right view we have taken the ROOT R L if it was the left view we would have taken the ROOT L R
+        recursion(node->right,level+1,temp);
+        recursion(node->left,level+1,temp);
+    }
+};
