@@ -1,0 +1,78 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    // this is to mark the parent for each nodes 
+    void markparent(TreeNode* root,unordered_map<TreeNode*,TreeNode*>&parent_check,TreeNode* target){
+        queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty()){
+            TreeNode* current=q.front();
+            q.pop();
+            // here we are storing the current as the parent of its left and right 
+            if(current->left){
+                parent_check[current->left]=current;
+                q.push(current->left);
+            }
+            if(current->right){
+                parent_check[current->right]=current;
+                q.push(current->right);
+            }
+        }
+    }
+    
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        unordered_map<TreeNode*,TreeNode*>parent_check;
+        markparent(root,parent_check,target);
+        
+        unordered_map<TreeNode*,bool>visited; 
+        queue<TreeNode*>q;
+        // we will push the first node as our target node
+        q.push(target);
+        
+        visited[target]=true;
+        int distance = 0;
+        
+        while(!q.empty()){
+            int size = q.size();
+            
+            // we will break when the distance reaches k 
+            if(distance++ == k)break;
+            
+            for(int i=0;i<size;i++){
+                TreeNode* current = q.front();
+                q.pop();
+                
+                // we will push all the left , right and the parent to the queue when that is not present into the visited
+                
+                if(current->left && !visited[current->left]){
+                    q.push(current->left);
+                    visited[current->left]=true;
+                }
+                if(current->right && !visited[current->right]){
+                    q.push(current->right);
+                    visited[current->right]=true;
+                }
+                if(parent_check[current] && !visited[parent_check[current]]){
+                    q.push(parent_check[current]);
+                    visited[parent_check[current]]=true;
+                }
+            }
+        }
+        vector<int>res;
+        while(!q.empty()){
+            // we will then simply print the elements present in the queue
+            TreeNode* current=q.front();
+            q.pop();
+            res.push_back(current->val);
+        }
+        return res;
+    }
+};
