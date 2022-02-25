@@ -1,0 +1,33 @@
+class solution {
+	public:
+		int countNode(TreeNode* root){
+			if(root==NULL) return 0;
+			// we have to find the height of the sub trees
+			int lh=findleft(root);
+			int rh=findright(root);
+			// we will then use the 2^n-1 formula to calculate the height when the tree has same heighted subtrees
+			if(lh==rh) return (l<<lh)-1;
+			// otherwise we will simply add the right and the left subtrees height when there is a case of uncomplete leaf nodes
+			return 1+countNode(root->left)+countNode(root->right);
+		}
+
+		// we will then calculate the number of nodes in each sub tree ,both left and right
+
+		int findleft(TreeNode* node){
+			int count=0;
+			while(node){
+				count ++;
+				node=node->left;
+
+			}
+			return count;
+		}
+		int findright(TreeNode* node){
+			int count=0;
+			while(node){
+				count ++;
+				node=node->right;
+			}
+			return count;
+		}
+};
