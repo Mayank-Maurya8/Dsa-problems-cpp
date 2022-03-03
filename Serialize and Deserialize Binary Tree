@@ -1,0 +1,78 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        // for empty tree
+        if(!root) return "";
+        // we will take the string which we are going to return which will have the level order traversal of the tree
+        string s="";
+        queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty()){
+            TreeNode* node=q.front();
+            q.pop();
+            // we will traverse all the nodes and for the null nodes we will simply append the # into the string
+            if(node ==NULL) s.append("#,");
+            // otherwise we will enter the value of the node by converting it into the string 
+            else s.append(to_string(node->val)+',');
+            if(node!=NULL){
+                q.push(node->left);
+                q.push(node->right);
+            }
+        }
+        cout <<s;
+        
+        return s;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        // if the string size is zero this means the tree is empty 
+        if(data.size() ==0) return NULL;
+        // stringstream is used to create an object with data 
+        stringstream s(data);
+        string str;
+        // we use getline to store the value before the , into the str
+        getline(s,str,',');
+        // we will make a new node which will have the value of the str converted to integer
+        TreeNode* node=new TreeNode(stoi(str));
+        queue<TreeNode*>q;
+        q.push(node);
+        while(!q.empty()){
+            TreeNode* node=q.front();
+            q.pop();
+            // we will move to every node in the s such that we are able to contruct the tree based on the nodes present 
+            getline(s,str,',');
+            if(str =="#")
+                node->left=NULL;
+            else{
+                TreeNode* lnode=new TreeNode(stoi(str));
+                node->left=lnode;
+                q.push(lnode);
+            }
+            getline(s,str,',');
+            if(str=="#")
+                node->right=NULL;
+            else{
+                TreeNode* rnode=new TreeNode(stoi(str));
+                node->right=rnode;
+                q.push(rnode);
+            }
+        }
+        return node;
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser, deser;
+// TreeNode* ans = deser.deserialize(ser.serialize(root));
