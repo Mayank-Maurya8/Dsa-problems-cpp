@@ -1,0 +1,45 @@
+We will use the logic of reverse inorder traversal so that we can get the kth largest element (right NODE left)
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int kthlargestest(TreeNode* root, int k) {
+        
+        stack<TreeNode*> s ;
+        TreeNode* node =root;
+        // using count to find the kth number 
+        int count=0;
+        
+        while(true){
+            // we will keep on pushing into the stack till we encounter a null
+            if(node != NULL){
+                s.push(node);
+                node = node->right;
+            }
+            else{
+                if(s.empty()){
+                    break;
+                }
+                // then we will move to the left of the top of the stack 
+                node = s.top();
+                s.pop();
+                count++;
+                // we return the value of that node val at kth location
+                if(count == k) return node->val;
+                node = node->left;
+            }
+        }
+        // we return -1 when stack is empty
+        return -1;
+    }
+};
