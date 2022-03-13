@@ -1,0 +1,25 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        // we will initially take the root node with the max range possible
+        return helper(root,LONG_MIN,LONG_MAX);
+    }
+    bool helper(TreeNode* root, long minv, long maxv){
+        if(root == NULL) return true;
+        // we will check if the node is present within the range or not
+        if(root->val >= maxv || root->val <= minv) return false;
+        // here we will update the maxv as root val for the left child and as minv for the right child
+        return helper(root->left, minv, root->val) && helper(root->right, root->val, maxv);
+    }
+};
