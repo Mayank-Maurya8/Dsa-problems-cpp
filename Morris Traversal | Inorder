@@ -24,7 +24,7 @@ public:
      			// and the another one is when we are going to create the threads to the root node from the right most node of the root->left
      			TreeNode* prev=cur->left;
      			while(prev->right && prev->right!=cur){
-     				prev->right;
+     				prev = prev->right;
      			}
      			if(prev->right==NULL){
      				prev->right=cur;
