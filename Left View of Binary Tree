@@ -1,0 +1,37 @@
+/*
+struct Node
+{
+    int data;
+    struct Node* left;
+    struct Node* right;
+    
+    Node(int x){
+        data = x;
+        left = right = NULL;
+    }
+};
+ */
+
+//Function to return a list containing elements of left view of the binary tree.
+
+void leftv(Node* root,vector<int> &left,int level){
+    if(root == NULL){
+        return;
+    }
+    
+    //here the level will be incremented everytiem we get the leftmost element , when there is null at left node we will go to the right node and only insert it into
+    //the vector when the level + 1 is done meaning it goes one level down
+    if(level == left.size()){
+        left.push_back(root->data);
+    }
+    //we will first move in the left direction and then in the right direction 
+    leftv(root->left, left, level+1);
+    leftv(root->right, left, level+1);
+}
+
+vector<int> leftView(Node *root)
+{
+    vector<int> left;
+   leftv(root, left, 0);
+   return left;
+}
